@@ -4,7 +4,7 @@
 
 | Nama | NIM | Kontribusi |
 |---|---|---|
-| Giriputra Galang Samudra | 103072400131 | the network is reliable,latency is zero,single point of failure |
+| Giriputra Galang Samudra | 1030724001311 | the network is reliable,latency is zero,single point of failure |
 | [nama 2] | [nim] | [pitfall/bagian yang dikerjakan] |
 | [nama 3] | [nim] | [pitfall/bagian yang dikerjakan] |
 
