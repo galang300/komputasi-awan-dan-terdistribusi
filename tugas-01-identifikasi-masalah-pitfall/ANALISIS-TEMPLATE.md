@@ -6,7 +6,6 @@
 |---|---|---|
 | Giriputra Galang Samudra | 1030724001311 | network is reliable, latency is zero, single point of failure |
 | Muhammad Faiz | [nim] | [pitfall/bagian yang dikerjakan] |
-| [nama 2] | [nim] | [pitfall/bagian yang dikerjakan] |
 | [nama 3] | [nim] | [pitfall/bagian yang dikerjakan] |
 
 ## Pitfall 1: the network is reliable — ditulis oleh Giriputra Galang Samudra
