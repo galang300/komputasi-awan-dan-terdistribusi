@@ -8,7 +8,7 @@
 | Muhammad Faiz | [nim] | [pitfall/bagian yang dikerjakan] |
 | [nama 3] | [nim] | [pitfall/bagian yang dikerjakan] |
 
-## Pitfall 1: the network is reliable — ditulis oleh Giriputra Galang Samudra
+## Pitfall : the network is reliable — ditulis oleh Giriputra Galang Samudra
 
 **Bukti di skenario:** network is always reliable, no need for retry
 
