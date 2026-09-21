@@ -33,6 +33,7 @@
 **Solusi desain awal:** yaitu dengan menghilangkan ketergantungan blocking synchronous antar-service
 
 **Trade-off:** alur transaksi tidak lagi linier. pengguna tidak langsung mendapat konfirmasi sukses seketika.
+
 ---
 
 ## Pitfall 3: single point of failure — ditulis oleh Giriputra Galang Samudra
