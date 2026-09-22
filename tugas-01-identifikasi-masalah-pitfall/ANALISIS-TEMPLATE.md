@@ -47,6 +47,7 @@
 **Trade-off:** aplikasi harus diubah menjadi stateless (tidak boleh simpan state/session di memori lokal server)
 
 ---
+1
 
 ## Kesimpulan Kelompok
 
