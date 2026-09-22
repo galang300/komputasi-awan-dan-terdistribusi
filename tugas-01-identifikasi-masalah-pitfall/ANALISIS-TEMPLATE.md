@@ -4,8 +4,8 @@
 
 | Nama | NIM | Kontribusi |
 |---|---|---|
-| Giriputra Galang Samudra | 1030724001311 | network is reliable,latency is zero,single point of failure |
-| Muhammad Faiz | [nim] | [pitfall/bagian yang dikerjakan] |
+| Giriputra Galang Samudra | 1030724001311 | network is reliable,single point of failure |
+| Mohammad Faiz | 103072400108 | latency is zero |
 | [nama 3] | [nim] | [pitfall/bagian yang dikerjakan] |
 
 ## Pitfall 1: the network is reliable — ditulis oleh Giriputra Galang Samudra
@@ -22,17 +22,22 @@
 
 ---
 
-## Pitfall 2: latency is zero — ditulis oleh Giriputra Galang Samudra
+## Pitfall 2: Latency is Zero — Mohammad Faiz
 
-**Bukti di skenario:** tidak ada timeout sama sekali pada pemanggilan antar service (modul pesanan memanggil modul pembayaran dan menunggu tanpa batas waktu).
+**Bukti pada Skenario:**  
+Tidak ditemukannya konfigurasi *timeout* pada komunikasi antarlayanan, di mana modul pesanan memanggil modul pembayaran secara *synchronous* dan tertahan (*blocked*) tanpa batas waktu.
 
-**Kenapa ini keliru:** banyak orang mengira suatu jaringan latensi itu nol atau orang bisa mengirim data tanpa loading sama sekali
+**Akar Masalah:**  
+Kekeliruan mendasar dalam mengasumsikan latensi jaringan bernilai nol (transfer data terjadi secara instan tanpa jeda).
 
-**Dampak ke FoodGo:** socket tcp ke sistem pembayaran habis dikarenakan koneksi yang lambat karean tidak pernah ditutup atau dilepas kembali ke pool
+**Dampak pada Sistem FoodGo:**  
+Mengakibatkan *socket leak* dan *connection exhaustion* pada layer TCP menuju gateway pembayaran. Koneksi tertahan akibat respons yang lambat dan *pool* tidak melepaskan (*release*) *resource* kembali ke sistem.
 
-**Solusi desain awal:** yaitu dengan menghilangkan ketergantungan blocking synchronous antar-service
+**Solusi Desain:**  
+Mengubah pola komunikasi *blocking synchronous* antarlayanan menjadi *asynchronous* untuk menghilangkan ketergantungan langsung saat pemrosesan.
 
-**Trade-off:** alur transaksi tidak lagi linier. pengguna tidak langsung mendapat konfirmasi sukses seketika.
+**Trade-off:**  
+Sifat transaksi berubah menjadi *non-linear*, sehingga sistem tidak lagi memberikan konfirmasi status sukses secara instan (*real-time*) kepada pengguna.
 ---
 
 ## Pitfall 3: single point of failure — ditulis oleh Giriputra Galang Samudra
