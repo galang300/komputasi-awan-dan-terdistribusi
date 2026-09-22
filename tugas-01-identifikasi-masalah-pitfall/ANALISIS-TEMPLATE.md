@@ -48,8 +48,6 @@
 
 ---
 
-1
-
 ## Kesimpulan Kelompok
 
 Galang: dari setiap problem diatas solusi arsitektur yang bisa saya tawarkan adalah
