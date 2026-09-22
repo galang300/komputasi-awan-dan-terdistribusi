@@ -35,9 +35,10 @@ Mengakibatkan *socket leak* dan *connection exhaustion* pada layer TCP menuju ga
 
 **Solusi Desain:**  
 Mengubah pola komunikasi *blocking synchronous* antarlayanan menjadi *asynchronous* untuk menghilangkan ketergantungan langsung saat pemrosesan.
-
 **Trade-off:**  
 Sifat transaksi berubah menjadi *non-linear*, sehingga sistem tidak lagi memberikan konfirmasi status sukses secara instan (*real-time*) kepada pengguna.
+**Trade-off:** alur transaksi tidak lagi linier. pengguna tidak langsung mendapat konfirmasi sukses seketika.
+
 ---
 
 ## Pitfall 3: single point of failure — ditulis oleh Giriputra Galang Samudra
@@ -51,7 +52,6 @@ Sifat transaksi berubah menjadi *non-linear*, sehingga sistem tidak lagi memberi
 **Trade-off:** aplikasi harus diubah menjadi stateless (tidak boleh simpan state/session di memori lokal server)
 
 ---
-
 
 ## Kesimpulan Kelompok
 
