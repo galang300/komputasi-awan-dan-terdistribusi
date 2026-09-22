@@ -15,7 +15,9 @@
 - Poin diskusi: membahas tentang pitfall kedua dan ketiga, yaitu latency is zero dan single point of failure. dan membahas tentang rangkuman untuk ketiga pitfall
 
 ## Review Silang
-- [Nama] mengomentari analisis [Nama lain]: ...
+- Galang mengomentari analisis Rizky: Sudah sesuai skenario dan penjelasan masalah sudah cukup jelas. Saran saya bagian solusi bisa dibuat lebih spesifik.
+- Faiz mengomentari analisis Galang: Penjelasan pitfall cukup jelas dan bukti dari skenario sesuai. Bagian dampak bisa dibuat lebih rinci.
+- Rizky mengomentari Faiz: Sesuai dengan kasus dan hubungan antara bukti, masalah, solusi sudah jelas.
 
 ## Log Penggunaan AI (Level 2)
 
