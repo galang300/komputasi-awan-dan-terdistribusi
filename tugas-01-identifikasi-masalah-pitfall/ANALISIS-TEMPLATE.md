@@ -6,7 +6,7 @@
 |---|---|---|
 | Giriputra Galang Samudra | 1030724001311 | network is reliable, latency is zero, single point of failure |
 | Muhammad Faiz | [nim] | [pitfall/bagian yang dikerjakan] |
-| Rizky Yusuf Maulana | 103072400054 | [pitfall/bagian yang dikerjakan] |
+| Rizky Yusuf Maulana | 103072400054 | bandwidth is infinite, the network is secure, topology doesn't change |
 
 ## Pitfall 1: the network is reliable — ditulis oleh Giriputra Galang Samudra
 
@@ -47,6 +47,14 @@
 **Trade-off:** aplikasi harus diubah menjadi stateless (tidak boleh simpan state/session di memori lokal server)
 
 ---
+
+## Pitfall 4: bandwidth is infinite — ditulis oleh Rizky Yusuf Maulana
+
+**Bukti di skenario:** 
+**Kenapa ini keliru:** 
+**Dampak ke FoodGo:** 
+**Solusi desain awal:** 
+**Trade-off:** 
 
 ## Kesimpulan Kelompok
 
