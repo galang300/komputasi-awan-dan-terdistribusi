@@ -4,10 +4,10 @@
 
 | Nama | NIM | Kontribusi |
 |---|---|---|
-| Giriputra Galang Samudra | 1030724001311 | network is reliable, latency is zero, single point of failure |
-| Muhammad Faiz | [nim] | [pitfall/bagian yang dikerjakan] |
-| Rizky Yusuf Maulana | 103072400054 | Single point of failure |
+| Giriputra Galang Samudra | 1030724001311 | network is reliable |
 | Mohammad Faiz | 103072400108 | latency is zero |
+| Rizky Yusuf Maulana | 103072400054 | Single point of failure |
+
 
 ## Pitfall 1: the network is reliable — ditulis oleh Giriputra Galang Samudra
 
