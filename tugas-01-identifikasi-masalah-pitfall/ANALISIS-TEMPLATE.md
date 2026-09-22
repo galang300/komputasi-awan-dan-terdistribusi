@@ -50,7 +50,7 @@
 
 ## Kesimpulan Kelompok
 
-Galang: dari setiap problem diatas solusi arsitektur yang bisa saya tawarkan adalah
+dari setiap problem diatas solusi arsitektur yang bisa saya tawarkan adalah
 1. Load Balancing & Stateless Web Tier (Penyelesaian Pitfall 3: SPOF)
 2. Event-Driven & Asynchronous Decoupling (Penyelesaian Pitfall 2: Latency is Non-Zero)
 3. Resilient HTTP Client & Idempotency Layer (Penyelesaian Pitfall 1: The Network is Reliable)
