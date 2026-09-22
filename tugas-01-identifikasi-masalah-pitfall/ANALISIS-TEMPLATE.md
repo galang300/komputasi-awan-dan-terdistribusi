@@ -48,14 +48,6 @@
 
 ---
 
-## Pitfall 4: bandwidth is infinite — ditulis oleh Rizky Yusuf Maulana
-
-**Bukti di skenario:** 
-**Kenapa ini keliru:** 
-**Dampak ke FoodGo:** 
-**Solusi desain awal:** 
-**Trade-off:** 
-
 ## Kesimpulan Kelompok
 
 Galang: dari setiap problem diatas solusi arsitektur yang bisa saya tawarkan adalah
