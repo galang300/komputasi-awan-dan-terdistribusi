@@ -1,12 +1,13 @@
 # Tugas 1 — Analisis Pitfall FoodGo
 
-**Kelompok:** [nama kelompok]
+**Kelompok:** Kelompok 02
 
 | Nama | NIM | Kontribusi |
 |---|---|---|
-| Giriputra Galang Samudra | 1030724001311 | network is reliable,single point of failure |
+| Giriputra Galang Samudra | 1030724001311 | network is reliable, latency is zero, single point of failure |
+| Muhammad Faiz | [nim] | [pitfall/bagian yang dikerjakan] |
+| Rizky Yusuf Maulana | 103072400054 | Single point of failure |
 | Mohammad Faiz | 103072400108 | latency is zero |
-| [nama 3] | [nim] | [pitfall/bagian yang dikerjakan] |
 
 ## Pitfall 1: the network is reliable — ditulis oleh Giriputra Galang Samudra
 
@@ -41,15 +42,17 @@ Sifat transaksi berubah menjadi *non-linear*, sehingga sistem tidak lagi memberi
 
 ---
 
-## Pitfall 3: single point of failure — ditulis oleh Giriputra Galang Samudra
+## Pitfall 3: single point of failure — ditulis oleh Rizky Yusuf Maulana
 
-**Bukti di skenario:** Saat trafik naik, satu server yang menangani semua modul (pesanan, pembayaran, notifikasi kurir) kewalahan karena semuanya berjalan di satu proses monolitik yang sama.
+**Bukti di skenario:** Skenario FoodGo menunjukkan kalau mereka menggunakan satu server untuk menangani semua modul dalam satu proses monolitik. Skenario FoodGo juga menunjukkan kalau server backend kadang crash total dan perlu di restart manual.
 
-**Kenapa ini keliru:** kerena tidak ada fault isolation. dalam satu proses monolitik, bug memory atau lonjakan thread pemrosesan pesanan akan langsung menyedot alokasi cpu, memori, dan I/O dari modul lain.
-**Dampak ke FoodGo:** yaitu terjadi total service outage yaitu ketika server kewalahan dan proses mati atau crash
+**Kenapa ini keliru:** Kondisi ini membuat banyaknya bagian sistem yang bergantung pada satu server. Jika server tersebut mengalami masalah, maka modul lain yang terdapat pada server tersebut ikut terganggu.
 
-**Solusi desain awal:** Deploy minimal dua atau lebih instance server yang identik di belakang load balancer.
-**Trade-off:** aplikasi harus diubah menjadi stateless (tidak boleh simpan state/session di memori lokal server)
+**Dampak ke FoodGo:** Saat traffic meningkat, satu server harus menangani banyak proses sehingga beban semakin besar. Jika server menjadi crash, proses modul menjadi ikut terganggu yang berakibat pengguna dapat mengalami gangguan seperti lemot, request timeout bahkan bisa gagal melakukan pemesanan.
+
+**Solusi desain awal:** Memisahkan modul agar tidak bergantung pada satu server. Lalu dapat disediakan server cadangan sehingga jika salah satu server mengalami masalah, layanan dapat berjalan dari server cadangan.
+
+**Trade-off:** Menambah server membutuhkan biaya dan resource yang besar. Kompleksitas sistem juga meningkat untuk dikelola karena tim harus mengelola beberapa service terpisah dan alur komunikasi antar sistemnya. 
 
 ---
 
