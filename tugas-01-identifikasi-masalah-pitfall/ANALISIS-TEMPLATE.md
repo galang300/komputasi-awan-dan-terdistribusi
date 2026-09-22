@@ -4,7 +4,7 @@
 
 | Nama | NIM | Kontribusi |
 |---|---|---|
-| Giriputra Galang Samudra | 1030724001311 | network is reliable |
+| Giriputra Galang Samudra | 103072400131 | network is reliable |
 | Mohammad Faiz | 103072400108 | latency is zero |
 | Rizky Yusuf Maulana | 103072400054 | Single point of failure |
 
