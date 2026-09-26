@@ -11,27 +11,4 @@
 
 | Tanggal | Tool AI | Prompt yang diberikan | Ringkasan saran/ide AI | Bagaimana diolah jadi tulisan/kode sendiri |
 |---|---|---|---|---|
-| 26/09/2026 | Gemini | graph LR
-	subgraph Publisher
-	   P1[Pesanan]
-	   P2[Pembayaran]
-	subgraph Message Broker [Message Broker - Kafka / RabbitMQ]
-	   Kurir{kurir: 'pembayaran berhasil'}
-	subgraph Subscribers
-	   Q1[modul katalog resto]
-
-P1[Pesanan] --> P2[Pembayaran] |Publish: "pemabayaran berhasil"| Kurir
-Kurir --> |Deliver Event| Q1.
-apakah kira kira rancangan saya ini sudah sesuai dengan instruksi soal ini
-Gambarkan minimal 4 komponen berikut dan interaksinya: modul Pesanan, modul Pembayaran, modul Kurir/Notifikasi, modul Katalog Resto (dan message broker/API gateway jika relevan).
-Jelaskan alur satu skenario penuh secara end-to-end di diagram (misalnya: pelanggan buat pesanan → bayar → resto terima notifikasi → kurir ditugaskan) — tunjukkan komponen mana berkomunikasi dengan siapa, dan jenis komunikasinya (sinkron/asinkron, request-response/event). | Rancangan Anda sudah memiliki ide dasar yang benar mengenai pemisahan peran, namun belum sepenuhnya tepat dan belum lengkap jika disesuaikan dengan instruksi soal.
-
-Beberapa hal yang perlu diperbaiki dari kode Anda:
-
-Kurir tertukar perannya: Di diagram Anda, Kurir dijadikan nama topik/broker (Kurir{kurir: 'pembayaran berhasil'}). Padahal pada soal, Kurir/Notifikasi adalah modul independen (Subscriber) yang menerima tugas untuk mencari driver atau mengirim peringatan, bukan nama broker/topik.
-
-Katalog Resto sebagai satu-satunya subscriber: Saat pembayaran berhasil, modul yang paling membutuhkan event tersebut adalah Modul Katalog Resto (agar resto menyiapkan makanan) dan Modul Kurir/Notifikasi (mencarikan driver dan mengirim notifikasi ke user).
-
-Sintaks Mermaid belum valid: Ada subgraph yang belum ditutup dengan end, serta baris P1 --> P2 |Publish...| menggabungkan dua relasi sekaligus secara keliru.
-
-Instruksi belum terpenuhi seutuhnya: Soal meminta interaksi penuh end-to-end (mulai dari pemesanan hingga penugasan kurir), menampilkan 4 modul wajib, serta memperjelas jenis komunikasinya (Sinkron/REST vs Asinkron/Event Pub-Sub). | ... |
+| 26/09/2026 | Gemini | Saya membuat rancangan diagram untuk menggambarkan interaksi modul Pesanan, Pembayaran, Kurir/Notifikasi, Katalog Resto, dan Message Broker. Rancangan awal saya menggunakan Mermaid dan memiliki alur Pesanan → Pembayaran → Message Broker → Katalog Resto. Apakah rancangan tersebut sudah sesuai dengan instruksi soal: menggambarkan minimal 4 komponen, yaitu modul Pesanan, modul Pembayaran, modul Kurir/Notifikasi, modul Katalog Resto, serta menjelaskan satu skenario penuh secara end-to-end dan jenis komunikasi yang digunakan (sinkron/asinkron, request-response/event)? | AI menyarankan bahwa rancangan awal sudah memiliki konsep dasar yang benar, tetapi masih perlu diperbaiki. Modul Kurir/Notifikasi seharusnya menjadi komponen tersendiri dan bukan nama topic pada message broker. Modul Katalog Resto dan Modul Kurir/Notifikasi perlu menerima event `payment-success`. Diagram juga perlu menunjukkan alur end-to-end dan membedakan komunikasi sinkron seperti HTTP dengan komunikasi asinkron melalui message broker. | Saya menggunakan saran tersebut sebagai bahan brainstorming. Saya kemudian memperbaiki rancangan dengan menambahkan Pelanggan/Mobile App, API Gateway, Modul Pesanan, Modul Pembayaran, Message Broker, Modul Katalog Resto, dan Modul Kurir/Notifikasi. Saya juga menambahkan topic `order-created` dan `payment-success` serta memberikan keterangan jenis komunikasi pada setiap interaksi. |r), menampilkan 4 modul wajib, serta memperjelas jenis komunikasinya (Sinkron/REST vs Asinkron/Event Pub-Sub). | ... |
