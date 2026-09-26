@@ -32,6 +32,54 @@ graph LR
 
 **Opsi B — draw.io / diagrams.net** (gratis, jalan di browser tanpa akun, atau app desktop offline di [app.diagrams.net](https://app.diagrams.net/)). Ekspor sebagai `.png` dan simpan di folder `diagram/`.
 
+## Hasil Jawaban
+
+** diagram mermaid.(Galang)
+````mermaid 
+graph TD
+    Client([Pelanggan / Mobile App])
+
+    subgraph Entrypoint [API]
+        Gateway[API Gateway]
+    end
+
+    subgraph Publisher
+        P1[Pesanan]
+        P2[Pembayaran]
+    end
+
+    subgraph Message_Broker [Message Broker - Kafka / RabbitMQ]
+        TopicOrder{Topic: 'order-created'}
+        TopicPayment{Topic: 'payment-success'}
+    end
+
+    subgraph Subscribers
+        Q1[Modul Katalog Resto]
+        Q2[Modul Notifikasi & Kurir]
+    end
+
+    %% Pemesanan
+    Client -->|Memesan makanan via HTTP POST| Gateway
+    Gateway -->|Mengirimkan request pesanan| P1
+
+    %% Event Order Dibuat
+    P1 -->|Mempublish 'order-created'| TopicOrder
+    TopicOrder -->|Mengantarkan event ke pembayaran| P2
+
+    %% Pembayaran
+    Client -.->|Membayar dengan beberapa metode pembayaran| P2
+    P2 -->|Mempublish 'payment-success'| TopicPayment
+
+    %% Penyaluran Event ke Resto dan Kurir
+    TopicPayment -->|Kirim ke modul resto agar dibuatkan makanan| Q1
+    TopicPayment -->|Mencari driver & kirim notifikasi| Q2
+````
+**penjelasan alur(Rizki)
+1.
+
+**Analisis Tertulis(Faiz)
+2.
+
 ## Struktur Submission
 
 ```
