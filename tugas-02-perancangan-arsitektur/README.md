@@ -74,8 +74,34 @@ graph TD
     TopicPayment -->|Kirim ke modul resto agar dibuatkan makanan| Q1
     TopicPayment -->|Mencari driver & kirim notifikasi| Q2
 ````
-**penjelasan alur(Rizki)
-1.
+**Penjelasan Alur(Rizky)
+1. Pelanggan → API Gateway → Modul Pesanan
+   - Jenis: Sinkron
+   - Komunikasi: Request-response
+
+2. Modul Pesanan → Message Broker
+   - Jenis: Asinkron
+   - Komunikasi: Event `order-created`
+
+3. Message Broker → Modul Pembayaran
+   - Jenis: Asinkron
+   - Komunikasi: Event
+
+4. Pelanggan ↔ Modul Pembayaran
+   - Jenis: Sinkron
+   - Komunikasi: Request-response
+
+5. Modul Pembayaran → Message Broker
+   - Jenis: Asinkron
+   - Komunikasi: Event `payment-success`
+
+6. Message Broker → Modul Katalog Resto
+   - Jenis: Asinkron
+   - Komunikasi: Event
+
+7. Message Broker → Modul Notifikasi & Kurir
+   - Jenis: Asinkron
+   - Komunikasi: Event
 
 **Analisis Tertulis(Faiz)
 2.
