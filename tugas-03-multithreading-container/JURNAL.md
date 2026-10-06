@@ -16,4 +16,4 @@
 
 | Tanggal | Tool AI | Prompt yang diberikan | Ringkasan saran/ide AI | Bagaimana diolah jadi tulisan/kode sendiri |
 |---|---|---|---|---|
-| ... | ... | ... | ... | ... |
+| 06/10/2026 | ChatGPT | Apa fungsi `threading.Lock()` dalam mengatasi race condition dan mengapa Lock diperlukan pada counter bersama? | Memberikan gambaran bahwa Lock membatasi akses ke bagian kode tertentu sehingga hanya satu thread yang dapat mengubah data bersama pada satu waktu. | Digunakan sebagai dasar untuk menjelaskan mekanisme perbaikan race condition pada README, lalu disesuaikan dengan implementasi Lock yang dibuat pada program. |
