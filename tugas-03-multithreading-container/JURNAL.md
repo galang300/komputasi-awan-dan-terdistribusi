@@ -2,7 +2,7 @@
 
 ## Percobaan tanpa Lock
 - Hasil `processed_count` yang didapat: 38
-- Kenapa bisa meleset (jelaskan mekanisme race condition dengan kata sendiri): ...
+- Kenapa bisa meleset (jelaskan mekanisme race condition dengan kata sendiri): ... <- Faiz
 
 ## Percobaan dengan Lock
 - Hasil `processed_count` setelah perbaikan: 100
