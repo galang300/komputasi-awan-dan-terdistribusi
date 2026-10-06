@@ -50,6 +50,7 @@ tugas-03-multithreading-container/
 └── bukti/              # Screenshot/video: hasil counter salah (tanpa lock), hasil benar (dengan lock), container jalan
 ```
 
+## Penjelasan race condition, perbaikan, kenapa threading (bukan multiprocessing/proses OS) -> Rizki
 ## Rubrik Penilaian (Tugas 3)
 
 | Komponen | Bobot | Kriteria |
