@@ -50,6 +50,20 @@ tugas-03-multithreading-container/
 └── bukti/              # Screenshot/video: hasil counter salah (tanpa lock), hasil benar (dengan lock), container jalan
 ```
 
+Penjelasan race condition, perbaikan, kenapa threading (bukan multiprocessing/proses OS)
+
+## 1. Apa itu Race Condition?
+Di simulasi FoodGo kemarin (100 pesanan, 10 thread), *race condition* itu terjadi saat beberapa thread bersamaan mengakses dan mengubah variabel `processed_count` tanpa pengaman. 
+
+Masalahnya, menambah nilai counter itu tidak instan, ada proses baca nilai lama, ditambah 1, lalu disimpan lagi. Nah, kalau dua thread baca nilai yang sama persis di waktu yang hampir bersamaan, salah satu datanya bakal ketimpa. Maka dari itu, kemarin waktu dicoba tanpa *Lock*, hasilnya cuma 38, padahal harusnya 100 karena banyak proses penambahan yang ke-skip.
+
+## 2. Solusinya Pakai Lock
+Biar aman, kita pakai `threading.Lock()`. Jadi, *Lock* ini fungsinya buat membatasi akses. Kalau lagi ada satu thread yang mengurus `processed_count`, thread lain harus menunggu dulu sampai giliran dia. Dengan begitu, proses baca, tambah, simpan jadi berurutan dan tidak tubrukan, makanya hasil akhirnya bisa pas 100.
+
+## 3. Kenapa Pakai Threading, Bukan Multiprocessing?
+* **Lebih Hemat Resource:** Kalau kita bikin proses OS baru buat tiap pesanan, *overhead*-nya bakal besar banget dan bikin server gampang habis memori. Kalau pakai *thread*, semuanya jalan di dalam satu proses yang sama dan bersamaan pakai resource yang ada, jadi jauh lebih ringan.
+* **Perlu Sinkronisasi:** Nah, karena mereka bersamaan di satu proses dan bisa mengakses data yang sama, maka butuh bantuan *Lock* agar datanya tidak kacau.
+
 ## Rubrik Penilaian (Tugas 3)
 
 | Komponen | Bobot | Kriteria |
