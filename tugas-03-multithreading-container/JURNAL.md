@@ -17,4 +17,5 @@
 
 | Tanggal | Tool AI | Prompt yang diberikan | Ringkasan saran/ide AI | Bagaimana diolah jadi tulisan/kode sendiri |
 |---|---|---|---|---|
+| 06/10/2026 | ChatGPT | Apa fungsi `threading.Lock()` dalam mengatasi race condition dan mengapa Lock diperlukan pada counter bersama? | Memberikan gambaran bahwa Lock membatasi akses ke bagian kode tertentu sehingga hanya satu thread yang dapat mengubah data bersama pada satu waktu. | Digunakan sebagai dasar untuk menjelaskan mekanisme perbaikan race condition pada README, lalu disesuaikan dengan implementasi Lock yang dibuat pada program. |
 | 05/10/26 | Gemini | Berikan struktur logika atau kode pembagian tugas multithreading, dengan pembagian 100 pesanan dengan 10 item | Menyarankan konsep pembagian batch (*chunking*) berbasis *step size* menggunakan `range(0, NUM_ORDERS, chunk_size)` untuk mengiris list ID pesanan ke tiap thread. | Mengubah pendekatan *step size* menjadi iterasi berbasis indeks worker `range(NUM_WORKERS)` dengan formula eksplisit `start` dan `end` (`start = i * NUM_ORDERS // NUM_WORKERS`, `end = (i + 1) * ...`) agar pembagian list terikat langsung pada ID tiap worker. |
