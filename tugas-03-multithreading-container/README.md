@@ -50,6 +50,7 @@ tugas-03-multithreading-container/
 └── bukti/              # Screenshot/video: hasil counter salah (tanpa lock), hasil benar (dengan lock), container jalan
 ```
 
+
 Penjelasan race condition, perbaikan, kenapa threading (bukan multiprocessing/proses OS)
 
 ## 1. Apa itu Race Condition?
@@ -63,6 +64,9 @@ Biar aman, kita pakai `threading.Lock()`. Jadi, *Lock* ini fungsinya buat membat
 ## 3. Kenapa Pakai Threading, Bukan Multiprocessing?
 * **Lebih Hemat Resource:** Kalau kita bikin proses OS baru buat tiap pesanan, *overhead*-nya bakal besar banget dan bikin server gampang habis memori. Kalau pakai *thread*, semuanya jalan di dalam satu proses yang sama dan bersamaan pakai resource yang ada, jadi jauh lebih ringan.
 * **Perlu Sinkronisasi:** Nah, karena mereka bersamaan di satu proses dan bisa mengakses data yang sama, maka butuh bantuan *Lock* agar datanya tidak kacau.
+=======
+## Penjelasan race condition, perbaikan, kenapa threading (bukan multiprocessing/proses OS) -> Rizki
+
 
 ## Rubrik Penilaian (Tugas 3)
 
