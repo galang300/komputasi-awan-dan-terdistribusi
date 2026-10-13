@@ -50,23 +50,23 @@ Dashboard manajemen RabbitMQ (untuk lihat antrean secara visual) otomatis aktif 
 
 ### **Analisis**
 
-#### **1. Alasan Memilih Message Queue**
+#### **1. Alasan Memilih MQ**
 
-Sistem **FoodGo** menggunakan *Message Queue* (RabbitMQ) agar modul Pembayaran dapat mengalirkan notifikasi (`pembayaran_berhasil`) ke modul Kurir/Notifikasi tanpa perlu menunggu respons (*decoupling*). Pola asinkron ini sangat ideal untuk menangani lonjakan pesanan maupun kondisi saat modul Kurir sedang sibuk.
+Sistem **FoodGo** menggunakan MQ (RabbitMQ) agar modul Pembayaran dapat mengirim notifikasi (`pembayaran_berhasil`) ke modul Kurir/Notifikasi tanpa perlu menunggu respons. Pola asinkron ini cocok untuk menangani lonjakan pesanan maupun kondisi saat modul Kurir sedang sibuk.
 
 #### **2. Cara Kerja dan Hasil Pengujian**
 
 - **Implementasi:** Publisher (modul Pembayaran) mengirim 3 event ke antrean `pembayaran_berhasil`. Consumer (modul Kurir) mengambil pesan tersebut lalu menampilkan rincian pembayaran (user1: Rp20.000, user2: Rp40.000, user3: Rp60.000).
-- **Pembuktian Asinkron:** Keunggulan *asynchronous decoupling* dapat dibuktikan dengan mematikan consumer saat publisher mengirim pesan. Ketika consumer dinyalakan kembali, pesan yang tersimpan di antrean akan tetap diproses.
+- **Pembuktian Asinkron:** Keunggulan komunikasi asinkron dapat dibuktikan dengan mematikan consumer saat publisher mengirim pesan. Ketika consumer dinyalakan kembali, pesan yang tersimpan di antrean akan tetap diproses.
 
-#### **3. Perbandingan Message Queue vs RPC**
+#### **3. Perbandingan MQ dengan RPC**
 
-- **RPC (Sinkron):** Pengirim harus menunggu respons. Pada pengujian fungsi `cek_saldo()` dan `proses_pembayaran()`, RPC membutuhkan jeda respons ±2 detik. Jika modul Kurir lambat atau *down*, modul Pembayaran ikut terhambat (*timeout*).
-- **Message Queue (Asinkron):** Publisher langsung melanjutkan proses tanpa menunggu consumer. Notifikasi tersimpan aman di antrean sampai consumer siap memprosesnya.
+- **RPC (Sinkron):** Pengirim harus menunggu respons. Pada pengujian fungsi `cek_saldo()` dan `proses_pembayaran()`, RPC membutuhkan waktu sekitar 2 detik untuk mendapatkan respons. Jika modul Kurir lambat atau tidak aktif, modul Pembayaran dapat ikut terhambat karena harus menunggu respons atau mengalami timeout.
+- **MQ (Asinkron):** Publisher dapat melanjutkan proses tanpa menunggu consumer menyelesaikan pemrosesan pesan. Pesan dapat menunggu di antrean sampai consumer siap memprosesnya.
 
 #### **4. Kesimpulan**
 
-Message Queue (RabbitMQ) adalah pilihan tepat untuk notifikasi asinkron pada FoodGo karena memisahkan ketergantungan antar-modul. Meski demikian, keandalan sistem tetap bergantung pada konfigurasi antrean, fitur persistensi pesan, dan mekanisme *acknowledgement* (ACK).
+MQ (RabbitMQ) cocok untuk mengirim notifikasi pembayaran pada FoodGo karena modul Pembayaran tidak harus menunggu modul Kurir memproses pesan. Dengan begitu, kedua modul tidak harus selalu aktif secara bersamaan. Namun, keandalan pesan tetap bergantung pada konfigurasi antrean, penyimpanan pesan, dan mekanisme acknowledgement (ACK).
 
 ## Struktur Submission
 
