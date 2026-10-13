@@ -48,6 +48,26 @@ Dashboard manajemen RabbitMQ (untuk lihat antrean secara visual) otomatis aktif 
 3. Untuk Jalur B, matikan dulu `consumer.py`, jalankan `publisher.py` beberapa kali, lalu nyalakan `consumer.py` — buktikan pesan **tetap diproses** (tidak hilang) karena antrean menyimpannya. Ini adalah inti pembelajaran *asynchronous decoupling*.
 4. Tulis analisis: kenapa jalur ini (RPC atau MQ) cocok untuk skenario yang kalian pilih, dan apa yang terjadi jika dipakai untuk skenario yang salah (mis. RPC dipakai untuk notifikasi kurir → modul pembayaran ikut lambat kalau kurir down).
 
+### **Analisis**
+
+#### **1. Alasan Memilih Message Queue**
+
+Sistem **FoodGo** menggunakan *Message Queue* (RabbitMQ) agar modul Pembayaran dapat mengalirkan notifikasi (`pembayaran_berhasil`) ke modul Kurir/Notifikasi tanpa perlu menunggu respons (*decoupling*). Pola asinkron ini sangat ideal untuk menangani lonjakan pesanan maupun kondisi saat modul Kurir sedang sibuk.
+
+#### **2. Cara Kerja dan Hasil Pengujian**
+
+- **Implementasi:** Publisher (modul Pembayaran) mengirim 3 event ke antrean `pembayaran_berhasil`. Consumer (modul Kurir) mengambil pesan tersebut lalu menampilkan rincian pembayaran (user1: Rp20.000, user2: Rp40.000, user3: Rp60.000).
+- **Pembuktian Asinkron:** Keunggulan *asynchronous decoupling* dapat dibuktikan dengan mematikan consumer saat publisher mengirim pesan. Ketika consumer dinyalakan kembali, pesan yang tersimpan di antrean akan tetap diproses.
+
+#### **3. Perbandingan Message Queue vs RPC**
+
+- **RPC (Sinkron):** Pengirim harus menunggu respons. Pada pengujian fungsi `cek_saldo()` dan `proses_pembayaran()`, RPC membutuhkan jeda respons ±2 detik. Jika modul Kurir lambat atau *down*, modul Pembayaran ikut terhambat (*timeout*).
+- **Message Queue (Asinkron):** Publisher langsung melanjutkan proses tanpa menunggu consumer. Notifikasi tersimpan aman di antrean sampai consumer siap memprosesnya.
+
+#### **4. Kesimpulan**
+
+Message Queue (RabbitMQ) adalah pilihan tepat untuk notifikasi asinkron pada FoodGo karena memisahkan ketergantungan antar-modul. Meski demikian, keandalan sistem tetap bergantung pada konfigurasi antrean, fitur persistensi pesan, dan mekanisme *acknowledgement* (ACK).
+
 ## Struktur Submission
 
 ```
