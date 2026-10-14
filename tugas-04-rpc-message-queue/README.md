@@ -48,6 +48,26 @@ Dashboard manajemen RabbitMQ (untuk lihat antrean secara visual) otomatis aktif 
 3. Untuk Jalur B, matikan dulu `consumer.py`, jalankan `publisher.py` beberapa kali, lalu nyalakan `consumer.py` — buktikan pesan **tetap diproses** (tidak hilang) karena antrean menyimpannya. Ini adalah inti pembelajaran *asynchronous decoupling*.
 4. Tulis analisis: kenapa jalur ini (RPC atau MQ) cocok untuk skenario yang kalian pilih, dan apa yang terjadi jika dipakai untuk skenario yang salah (mis. RPC dipakai untuk notifikasi kurir → modul pembayaran ikut lambat kalau kurir down).
 
+### **Analisis**
+
+#### **1. Alasan Memilih MQ**
+
+Sistem **FoodGo** menggunakan MQ (RabbitMQ) agar modul Pembayaran dapat mengirim notifikasi (`pembayaran_berhasil`) ke modul Kurir/Notifikasi tanpa perlu menunggu respons. Pola asinkron ini cocok untuk menangani lonjakan pesanan maupun kondisi saat modul Kurir sedang sibuk.
+
+#### **2. Cara Kerja dan Hasil Pengujian**
+
+- **Implementasi:** Publisher (modul Pembayaran) mengirim 3 event ke antrean `pembayaran_berhasil`. Consumer (modul Kurir) mengambil pesan tersebut lalu menampilkan rincian pembayaran (user1: Rp20.000, user2: Rp40.000, user3: Rp60.000).
+- **Pembuktian Asinkron:** Keunggulan komunikasi asinkron dapat dibuktikan dengan mematikan consumer saat publisher mengirim pesan. Ketika consumer dinyalakan kembali, pesan yang tersimpan di antrean akan tetap diproses.
+
+#### **3. Perbandingan MQ dengan RPC**
+
+- **RPC (Sinkron):** Pengirim harus menunggu respons. Pada pengujian fungsi `cek_saldo()` dan `proses_pembayaran()`, RPC membutuhkan waktu sekitar 2 detik untuk mendapatkan respons. Jika modul Kurir lambat atau tidak aktif, modul Pembayaran dapat ikut terhambat karena harus menunggu respons atau mengalami timeout.
+- **MQ (Asinkron):** Publisher dapat melanjutkan proses tanpa menunggu consumer menyelesaikan pemrosesan pesan. Pesan dapat menunggu di antrean sampai consumer siap memprosesnya.
+
+#### **4. Kesimpulan**
+
+MQ (RabbitMQ) cocok untuk mengirim notifikasi pembayaran pada FoodGo karena modul Pembayaran tidak harus menunggu modul Kurir memproses pesan. Dengan begitu, kedua modul tidak harus selalu aktif secara bersamaan. Namun, keandalan pesan tetap bergantung pada konfigurasi antrean, penyimpanan pesan, dan mekanisme acknowledgement (ACK).
+
 ## Struktur Submission
 
 ```
