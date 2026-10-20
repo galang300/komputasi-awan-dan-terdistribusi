@@ -36,6 +36,18 @@ python3 src/node.py --id 5 --port 5005 --peers 5001,5002,5003,5004
 2. **Leader mati**: matikan (Ctrl+C) proses node leader (node 5), amati node lain mendeteksi leader hilang dan memicu election baru. Catat leader baru yang terpilih (harusnya node 4).
 3. Simpan log terminal (screenshot atau `> log_nodeX.txt` redirect) dari kedua skenario ke folder `bukti/`.
 
+# Analisis Koordinasi dan Konsensus Sistem FoodGo
+
+- **Kebutuhan Leader:** FoodGo memerlukan leader untuk mengelola antrean pesanan agar tertib dan menghindari pemrosesan ganda. Jika leader mati, sistem harus mampu memilih penggantinya dengan cepat. Namun, tetap diperlukan mekanisme tambahan untuk menjaga konsistensi data pesanan
+
+- **Alasan Pemilihan Bully Algorithm:** Algoritma ini dipilih karena logikanya sederhana dan cocok untuk simulasi 5 node. Node dengan ID tertinggi menjadi leader. Dibandingkan Raft yang lebih kompleks, Bully lebih mudah diterapkan, tetapi memiliki kelemahan berupa banyaknya pesan election dan jeda saat pergantian leader
+
+- **Hasil Uji Skenario 1 (Normal):** Saat kelima node dinyalakan hampir bersamaan, Node 5 terpilih sebagai leader karena memiliki ID tertinggi dan mengirim pesan `COORDINATOR` kepada node lain
+
+- **Hasil Uji Skenario 2 (Node 5 Dimatikan):** Ketika Node 5 mati, node lain mendeteksi timeout dan memulai pemilihan ulang. Node 4 terpilih sebagai leader baru dengan estimasi waktu pemulihan sekitar 3–5 detik
+
+- **Kesimpulan:** Bully Algorithm berhasil diterapkan untuk menangani pergantian leader, yaitu dari Node 5 ke Node 4 saat terjadi kegagalan. Namun, FoodGo masih memerlukan mekanisme tambahan untuk menjaga konsistensi dan mencegah duplikasi pesanan
+
 ## Struktur Submission
 
 ```
