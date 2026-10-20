@@ -36,7 +36,7 @@ python3 src/node.py --id 5 --port 5005 --peers 5001,5002,5003,5004
 2. **Leader mati**: matikan (Ctrl+C) proses node leader (node 5), amati node lain mendeteksi leader hilang dan memicu election baru. Catat leader baru yang terpilih (harusnya node 4).
 3. Simpan log terminal (screenshot atau `> log_nodeX.txt` redirect) dari kedua skenario ke folder `bukti/`.
 
-# Analisis Koordinasi dan Konsensus Sistem FoodGo
+# Analisis 
 
 - **Kebutuhan Leader:** FoodGo memerlukan leader untuk mengelola antrean pesanan agar tertib dan menghindari pemrosesan ganda. Jika leader mati, sistem harus mampu memilih penggantinya dengan cepat. Namun, tetap diperlukan mekanisme tambahan untuk menjaga konsistensi data pesanan
 
