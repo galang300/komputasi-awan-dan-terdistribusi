@@ -14,4 +14,4 @@
 
 | Tanggal | Tool AI | Prompt yang diberikan | Ringkasan saran/ide AI | Bagaimana diolah jadi tulisan/kode sendiri |
 |---|---|---|---|---|
-| ... | ... | ... | ... | ... |
+| 2 Nov 2026 | Gemini | *"Tugas 6 - Simulasi Chord DHT (single-process, tanpa jaringan sungguhan)... tolong lengkapi kode berikut"* (menyertakan seluruh kerangka kode awal Python dengan TODO 1 s.d. 8) | Menyediakan implementasi lengkap untuk semua `TODO` pada class `ChordRing`: algoritma `find_successor` berbasis `sorted()` dan *wrap-around*, alur migrasi penanggung jawab data pada `join()` dan `leave()`, serta mekanisme penyimpanan dan pembacaan pada `register_kurir()` dan `lookup()`. | • Mengkaji dan memverifikasi logika ring melingkar (*modulo/wrap-around*) pada `find_successor` agar sesuai konsep asli paper Chord.<br>• Menyusun ulang urutan eksekusi pada `join()` (mencari *successor* lama sebelum mendaftarkan ID baru ke kamus `nodes`).<br>• Menyesuaikan pesan log terminal migrasi data agar rapi dan mudah dievaluasi saat skenario `main()` dijalankan.<br>• Menambahkan penanganan kasus batas (*edge cases*), seperti kondisi ketika ring masih kosong. |
