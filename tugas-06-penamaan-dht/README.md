@@ -30,6 +30,45 @@ python3 src/chord_simulation.py
 2. Gambarkan (boleh pakai Mermaid, lihat Tugas 2) ring topology dari simulasi kalian, tandai node mana yang bertanggung jawab atas ID Kurir mana.
 3. Jelaskan apa yang terjadi pada mapping saat sebuah node **keluar** dari ring (siapa yang mengambil alih tanggung jawabnya) — dukung dengan output program.
 
+## Analisis 
+## 1. Perbandingan DHT/Chord, Flat Naming, dan DNS
+
+- **Flat Naming:** Mengandalkan tabel pemetaan langsung antara ID dan alamat IP. Jika pengelolaan tabel ini hanya dipegang oleh satu server, maka akan muncul risiko *Single Point of Failure* (SPOF) ketika server mengalami gangguan.
+- **DNS (Domain Name System):** Menggunakan pendekatan hierarkis untuk menerjemahkan nama menjadi alamat IP. DNS sudah memiliki sistem terdistribusi, tetapi mekanismenya berbeda dengan DHT yang secara khusus membagi tanggung jawab penyimpanan data ke berbagai node.
+- **Chord:** Memanfaatkan *Distributed Hash Table* (DHT) untuk membagi tanggung jawab penyimpanan berdasarkan hasil fungsi *hashing* dari ID node dan ID kurir. Pendekatan ini membuat sistem pemetaan menjadi terdesentralisasi dan mengurangi ketergantungan pada satu server pusat.
+
+## 2. Alasan Penggunaan Chord pada FoodGo
+
+Penerapan Chord pada aplikasi FoodGo sesuai dengan kebutuhan sistem karena alamat IP kurir dapat berubah ketika berpindah lokasi atau jaringan, sementara ID kurir tetap digunakan sebagai identitas.
+
+Melalui mekanisme *hashing* dan *lookup*, sistem dapat menemukan node yang bertanggung jawab atas pemetaan ID kurir ke alamat IP. Hal ini membuat proses pencarian lebih fleksibel serta mengurangi ketergantungan terhadap satu server pusat.
+
+## 3. Analisis Perubahan Topologi Ring
+
+Dalam simulasi awal yang terdiri dari empat node, terjadi penambahan `node-medan-1` (ID 123) dan keluarnya `node-jakarta-1` (ID 177) dari *ring*.
+
+- Saat `node-medan-1` bergabung, tanggung jawab data dapat berpindah jika terdapat *hash* kurir yang masuk ke dalam rentang tanggung jawab node tersebut. Namun, dalam simulasi ini tidak ada data pemetaan kurir yang dialihkan ke node tersebut.
+- Saat `node-jakarta-1` keluar, *successor* berikutnya adalah `node-bandung-1` (ID 40) melalui mekanisme *wrap-around*. Namun, tidak ada data pemetaan yang perlu dialihkan karena node tersebut tidak bertanggung jawab atas ketiga data kurir yang didaftarkan.
+
+Hasil *lookup* setelah perubahan topologi tetap menunjukkan alamat IP yang sama seperti semula:
+
+| **ID Kurir** | **Alamat IP** |
+|---|---|
+| `kurir-001` | `192.168.1.10` |
+| `kurir-002` | `192.168.1.11` |
+| `kurir-003` | `192.168.1.12` |
+
+## 4. Contoh Proses Lookup
+
+Berikut adalah simulasi alur pencarian data `kurir-001`:
+
+1. Sistem menerima masukan berupa ID `kurir-001`.
+2. Fungsi *hashing* dijalankan dan menghasilkan nilai `50`.
+3. Sistem mencari node dengan ID terkecil yang nilainya lebih besar atau sama dengan `50`.
+4. Ditemukan `node-jakarta-2` dengan ID `102` sebagai *successor*.
+5. Sistem mengambil alamat IP kurir dari data pemetaan yang tersimpan pada `self.data`.
+6. Proses *lookup* selesai dan mengembalikan alamat IP `192.168.1.10`.
+
 ## Struktur Submission
 
 ```
