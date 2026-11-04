@@ -14,4 +14,4 @@
 
 | Tanggal | Tool AI | Prompt yang diberikan | Ringkasan saran/ide AI | Bagaimana diolah jadi tulisan/kode sendiri |
 |---|---|---|---|---|
-| ... | ... | ... | ... | ... |
+| 04/11/2026 | ChatGPT | Mengapa Chord DHT cocok digunakan untuk menangani perubahan alamat IP kurir pada sistem FoodGo? | AI memberikan gambaran mengenai hashing, lookup, pembagian tanggung jawab antar-node, dan perubahan topologi pada Chord | Saya menggunakan penjelasan tersebut untuk memahami konsep Chord, kemudian menyesuaikannya dengan skenario FoodGo dan hasil simulasi kelompok |
