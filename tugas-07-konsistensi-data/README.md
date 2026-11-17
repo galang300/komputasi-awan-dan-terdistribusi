@@ -24,11 +24,11 @@ Skeleton `src/replica_simulation.py` mensimulasikan dua replika (Jakarta & Bandu
 python3 src/replica_simulation.py
 ```
 
-## Bagian 1 — Analisis
+## Analisis
 
 ### 1. Model konsistensi yang dipilih
 
-Bug terjadi karena replikasi Jakarta ke Bandung berjalan asinkron. Pelanggan yang baru top-up lalu membaca dari Bandung akan mendapat saldo lama, sehingga pesanan yang sah ditolak. Pada simulasi, delay replikasi diatur 2 detik.
+Bug terjadi karena replikasi Jakarta ke Bandung berjalan asinkron (di simulasi, delay 2 detik). Pelanggan yang baru top-up lalu membaca dari Bandung mendapat saldo lama, sehingga pesanan yang sah ditolak.
 
 | | Jumlah like | Saldo e-wallet |
 |---|---|---|
@@ -36,28 +36,18 @@ Bug terjadi karena replikasi Jakarta ke Bandung berjalan asinkron. Pelanggan yan
 | Sifat data | Statistik, boleh berupa perkiraan | Uang, harus akurat dan dapat diaudit |
 | Risiko | Hampir nol | Pelanggan kecewa, merchant gagal dibayar, FoodGo menanggung selisih |
 
-Ada dua masalah yang berbeda:
+Ada dua masalah berbeda. Pertama, **baca data usang**: pelanggan tidak melihat top-up miliknya sendiri, yang merusak pengalaman tetapi belum merusak data. Kedua, **konflik tulis**: dua debit Rp80.000 pada saldo Rp100.000 masuk bersamaan lewat Jakarta dan Bandung. Tanpa urutan yang sama, keduanya bisa lolos (*double spend*).
 
-1. **Baca data usang.** Pelanggan tidak melihat top-up miliknya sendiri. Ini merusak pengalaman, tetapi belum merusak data.
-2. **Konflik tulis.** Misalnya dua debit Rp80.000 pada saldo Rp100.000 masuk bersamaan lewat Jakarta dan Bandung. Tanpa urutan yang sama, keduanya bisa lolos dan terjadi *double spend*.
-
-Karena itu, **penulisan saldo harus Sequential Consistency**: tiap akun punya satu leader (home region) yang mengurutkan semua debit dan kredit, dan replika lain mengikutinya. Sequential tidak dipakai untuk semua data karena mahal dari sisi latensi dan ketersediaan. Rating, ulasan, dan promo tetap cukup eventual.
+Karena itu **penulisan saldo harus Sequential Consistency**: tiap akun punya satu leader yang mengurutkan semua debit dan kredit, dan replika lain mengikutinya. Sequential tidak dipakai untuk semua data karena mahal dari sisi latensi dan ketersediaan, jadi rating, ulasan, dan promo tetap eventual.
 
 ### 2. Solusi Client-Centric
 
-Yang dikeluhkan adalah satu pelanggan tidak melihat tulisannya sendiri, jadi cukup jaminan per klien tanpa mensinkronkan semua replika setiap saat.
-
-| Jenis | Relevan? | Alasan |
-|---|---|---|
-| **Read-Your-Writes** | Ya (utama) | Pelanggan harus melihat top-up miliknya sendiri |
-| **Monotonic Reads** | Ya (pendukung) | Saldo yang tampil tidak boleh mundur saat app pindah replika |
-| Monotonic Writes | Sebagian | Sudah ditangani pengurutan di leader |
-| Writes-Follow-Reads | Kurang | Tidak ada tulisan yang bergantung pada bacaan, selain cek saldo saat debit |
+Keluhan utamanya adalah satu pelanggan tidak melihat tulisannya sendiri, jadi cukup jaminan per klien. **Read-Your-Writes** menjadi solusi utama, dan **Monotonic Reads** mendukungnya agar saldo yang tampil tidak mundur saat app pindah replika. Monotonic Writes sudah tertangani oleh pengurutan di leader, sedangkan Writes-Follow-Reads kurang relevan.
 
 **Mekanisme (version number):**
 
 1. Setiap perubahan saldo menaikkan `version` sebesar 1 di leader.
-2. Respons top-up membawa saldo dan versinya. Aplikasi menyimpannya sebagai `versi_minimal` (bisa lewat header `X-Min-Version` atau token sesi).
+2. Respons top-up membawa saldo dan versinya. Aplikasi menyimpannya sebagai `versi_minimal` (lewat header `X-Min-Version` atau token sesi).
 3. Setiap request berikutnya membawa `versi_minimal`. Jika versi replika lebih kecil, replika **polling tiap 0,5 detik** sampai menyusul (seperti di simulasi).
 4. Untuk produksi: beri batas waktu tunggu, lalu forward ke leader. Jika leader tidak terjangkau, tolak dengan pesan "sedang sinkronisasi" dan jangan menjawab dengan data usang.
 5. Debit memakai conditional write di leader (`... WHERE balance >= X`) dan `idempotency_key` agar tidak terpotong dua kali saat retry.
