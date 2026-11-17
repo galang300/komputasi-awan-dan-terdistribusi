@@ -1,11 +1,19 @@
 # Jurnal Proses — Tugas 7
 
 ## Diskusi pemilihan model konsistensi
-- Argumen yang dipertimbangkan: ...
-- Kesimpulan akhir & alasan: ...
+- **Argumen yang dipertimbangkan:**
+  1. **Eventual Consistency murni:** Unggul dari sisi latensi rendah dan ketersediaan tinggi (*high availability*), sehingga cocok untuk data non-kritis seperti jumlah *like* atau ulasan. Namun, pada fitur *e-wallet* FoodGo, keterlambatan sinkronisasi menyebabkan *stale read*—saldo pelanggan terbaca belum bertambah setelah *top-up*. Dampaknya fatal secara bisnis: transaksi valid ditolak, menurunkan kepercayaan pengguna, dan berisiko menimbulkan inkonsistensi saldo lintas wilayah.
+  2. **Sequential / Strong Consistency global:** Menjamin seluruh replika (Jakarta dan Bandung) selalu melihat urutan operasi yang sama sebelum transaksi selesai. Meskipun paling aman untuk data finansial, penerapan konsistensi ketat secara global memaksa setiap operasi menunggu sinkronisasi lintas wilayah, sehingga meningkatkan latensi aplikasi dan menurunkan *availability* saat jaringan antar-server melambat.
+  3. **Client-Centric Consistency (*Read-Your-Writes*):** Memberikan titik tengah yang paling efisien. Replikasi antar-wilayah tetap berjalan secara asinkron agar performa sistem tetap tinggi, tetapi sistem melacak versi transaksi terakhir milik pelanggan (`version_counter`). Ketika pelanggan berpindah koneksi ke server Bandung setelah melakukan *write* di Jakarta, server Bandung memastikan datanya minimal sudah mencapai versi tersebut sebelum melayani pembacaan saldo.
+
+- **Kesimpulan akhir & alasan:**
+  **Eventual Consistency saja tidak cukup**, sedangkan **Sequential Consistency penuh terlalu berat** untuk diterapkan pada setiap permintaan baca (*read*). Solusi terbaik untuk kasus FoodGo adalah menerapkan **Client-Centric Consistency dengan mekanisme *Read-Your-Writes* (RYW)** yang dilengkapi *fallback redirect* ke server *primary* (Jakarta) apabila replika lokal (Bandung) belum sinkron melewati batas waktu (`RYW_TIMEOUT`). Pendekatan ini mencegah penolakan transaksi akibat *stale read* tanpa mengorbankan performa sistem secara keseluruhan.
 
 ## Simulasi (jika dikerjakan)
-- Hasil skenario naif vs Read-Your-Writes: ...
+
+- **Hasil skenario naif vs Read-Your-Writes:**
+  - **Skenario Naif (`baca_saldo_naif`):** Pelanggan melakukan *top-up* sebesar `50000` di server Jakarta (versi `1`), dengan jadwal replikasi ke Bandung tertunda `REPLICATION_DELAY = 2.0` detik. Saat pembacaan dilakukan dari server Bandung `0.5` detik kemudian, server Bandung mengembalikan saldo `0.0` (*inconsistent/stale read*). Saldo baru ter-update menjadi `50000` setelah jeda replikasi `2.0` detik selesai.
+  - **Skenario Read-Your-Writes (`baca_saldo_read_your_writes`):** Pelanggan melakukan *top-up* kedua sebesar `20000` di server Jakarta sehingga saldo menjadi `70000` (versi `2`). Saat pembacaan dari Bandung dilakukan `0.5` detik kemudian, versi di Bandung masih tertahan di versi `1` (saldo lama `50000`). Mekanisme RYW menahan proses baca dengan *polling* setiap `0.5` detik (`POLL_INTERVAL * 5`) selama sekitar `1.50` detik hingga replikasi dari Jakarta selesai dan Bandung mencapai versi `2`. Hasil pembacaan akhir dari Bandung akurat sebesar `70000` (dan apabila replikasi melebihi `RYW_TIMEOUT = 5.0` detik, permintaan otomatis dialihkan ke Jakarta agar pelanggan tetap mendapat data terbaru).
 
 ## Log Penggunaan AI (Level 2)
 
