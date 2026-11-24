@@ -65,11 +65,11 @@ Lonjakan saat pemilu atau PPDB umumnya membebani lapisan depan: portal cek statu
 
 | Kriteria | Public Cloud murni | Hybrid (pilihan kami) |
 |---|---|---|
-| Skalabilitas | ✅ Sangat baik, praktis tanpa batas | ✅ Baik untuk lapisan depan, terbatas tapi terencana untuk inti |
-| Kendali negara atas infrastruktur | ❌ Dikendalikan penyedia, umumnya perusahaan asing | ✅ Inti dikendalikan penuh oleh negara |
-| Yurisdiksi hukum | ❌ Penyedia asing bisa tunduk pada hukum negara asalnya (misalnya US CLOUD Act) | ✅ Sepenuhnya hukum Indonesia |
-| Resource pooling | ❌ Berbagi perangkat keras dengan tenant lain | ✅ Hanya antarinstansi pemerintah |
-| Kesesuaian dengan syarat kasus | ❌ Melanggar syarat "terkendali penuh oleh negara" | ✅ Memenuhi |
+| Skalabilitas | Sangat baik, praktis tanpa batas | Baik untuk lapisan depan, terbatas tapi terencana untuk inti |
+| Kendali negara atas infrastruktur | Dikendalikan penyedia, umumnya perusahaan asing | Inti dikendalikan penuh oleh negara |
+| Yurisdiksi hukum | Penyedia asing bisa tunduk pada hukum negara asalnya (misalnya US CLOUD Act) | Sepenuhnya hukum Indonesia |
+| Resource pooling | Berbagi perangkat keras dengan tenant lain | Hanya antarinstansi pemerintah |
+| Kesesuaian dengan syarat kasus | Melanggar syarat "terkendali penuh oleh negara" | Memenuhi |
 
 **Catatan penting:** penyedia public cloud dengan region di Jakarta bisa memenuhi syarat **lokasi** data di Indonesia. Tetapi lokasi tidak sama dengan **kendali**. Akses fisik, kunci enkripsi utama, staf operasional, dan keputusan teknis tetap ada di tangan penyedia. Untuk data biometrik yang tidak bisa diganti seperti kata sandi saat bocor, risiko itu tidak sebanding dengan keuntungan elastisitasnya.
 
