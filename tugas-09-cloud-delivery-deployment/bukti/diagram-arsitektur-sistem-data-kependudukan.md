@@ -89,4 +89,4 @@ flowchart TB
 - Akses instansi dilakukan melalui jalur yang terkontrol, dengan autentikasi dan pembatasan hak akses.
 - Monitoring, metering, dan audit log digunakan untuk memantau penggunaan layanan serta aktivitas akses.
 
-> Diagram ini merupakan visualisasi dari analisis kelompok mengenai Hybrid Cloud dan pembagian service model pada setiap komponen sistem.
+> Diagram ini merupakan visualisasi dari analisis kelompok mengenai Hybrid Cloud dan pembagian service model pada setiap komponen sistem
